@@ -14,11 +14,36 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String
-  password  String
-  active    Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  id                 Int            @id @default(autoincrement())
+  email              String         @unique
+  name               String
+  password           String
+  active             Boolean        @default(false)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime?      @updatedAt
+  user1Conversations Conversation[] @relation("User1Conversations")
+  user2Conversations Conversation[] @relation("User2Conversations")
+  Message            Message[]
+}
+
+model Conversation {
+  id         Int       @id @default(autoincrement())
+  user1      User      @relation("User1Conversations", fields: [user1_id], references: [id])
+  user1_id   Int
+  user2      User      @relation("User2Conversations", fields: [user2_id], references: [id])
+  user2_id   Int
+  start_time DateTime  @default(now())
+  end_time   DateTime? @default(now())
+  Message    Message[]
+}
+
+model Message {
+  id              Int           @id @default(autoincrement())
+  conversation    Conversation? @relation(fields: [conversation_id], references: [id])
+  conversation_id Int?
+  sender          User          @relation(fields: [sender_id], references: [id])
+  sender_id       Int
+  message         String
+  is_read         Boolean       @default(false)
+  timestamp       DateTime      @default(now())
 }
