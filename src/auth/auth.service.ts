@@ -16,11 +16,8 @@ export class AuthService {
     try {
       // cek email user apakah terdaftar di sistem atau tidak
       const user = await this.userService.findByEmail(dto.email);
-      console.log('user', user);
-      console.log('pass ', dto.password);
       // jika user terdaftar dan password sesuai dengan yang ada di db
       if (user && (await compare(dto.password, user.password))) {
-        console.log('user 22', user);
         const { password, ...result } = user;
         const payload = { det: result.id, email: result.email };
         return {

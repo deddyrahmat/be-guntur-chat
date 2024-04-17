@@ -25,6 +25,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return payload; // return the same payload data
   }
 
+  async validateRecipient(recipient: string): Promise<boolean> {
+    // Implement your validation logic here
+    // For example, check if recipient exists in the database
+    // You can also check if the recipient is in the user's contact list or has permissions to receive messages
+    // Return true if recipient is valid, otherwise return false
+    return true; // Placeholder, replace with your actual validation logic
+  }
+
   // it will be handled when a client connects to the server
   handleConnection(socket: Socket) {
     this.logger.log(`Socket connected: ${socket.id}`);
