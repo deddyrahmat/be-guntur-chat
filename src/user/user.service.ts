@@ -49,8 +49,27 @@ export class UserService {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    try {
+      const response = await this.prismaService.user.findMany({
+        // where: {
+        //   active: true, // Filter hanya pengguna dengan status aktif
+        // },
+        // take: 10, // Batasan jumlah pengguna yang dimuat
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          active: true,
+          role: true,
+          createdAt: true,
+        },
+      });
+
+      return response;
+    } catch (error: any) {
+      ResponseServerError();
+    }
   }
 
   async findByEmail(email: string) {
