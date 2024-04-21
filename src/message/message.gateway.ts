@@ -21,6 +21,7 @@ export class MessageGateway
   constructor(private readonly userService: UserService) {}
 
   private logger = new Logger('MessageGateway');
+  private onlineUsers = new Set<string>();
 
   @SubscribeMessage('message') // subscribe to chat event messages
   async handleMessage(
@@ -37,30 +38,29 @@ export class MessageGateway
     return;
   }
 
-  //=========================================================================
-  // ini untuk dikelola ke database
-  // async handleMessage(@MessageBody() payload: AddMessageDto) {
-  //   const user = await this.userService.findByEmail(payload.sender);
-  //   const send = { sender: user.id, message: payload.message };
-  //   this.logger.log(`Message received: ${user.id} - ${payload.message}`);
-  //   this.server.emit('message', send); // broadbast a message to all clients
-  //   return send; // return the same payload data
-  // }
-  async validateRecipient(recipient: string): Promise<boolean> {
-    // Implement your validation logic here
-    // For example, check if recipient exists in the database
-    // You can also check if the recipient is in the user's contact list or has permissions to receive messages
-    // Return true if recipient is valid, otherwise return false
-    return true; // Placeholder, replace with your actual validation logic
-  }
-
   // it will be handled when a client connects to the server
   handleConnection(socket: Socket) {
+    // ambil id user yang dikirim dari FE, lalu simpan
+    const userId = socket.handshake.auth.userId;
     this.logger.log(`Socket connected: ${socket.id}`);
+    this.onlineUsers.add(userId);
+    // Update status online users
+    this.updateOnlineUsers();
   }
 
   // it will be handled when a client disconnects from the server
   handleDisconnect(socket: Socket) {
+    // ambil id user yang dikirim dari FE, lalu hapus
+    const userId = socket.handshake.auth.userId;
     this.logger.log(`Socket disconnected: ${socket.id}`);
+    this.onlineUsers.delete(userId);
+    // Update status online users
+    this.updateOnlineUsers();
+  }
+
+  private updateOnlineUsers() {
+    const onlineUsersArray = Array.from(this.onlineUsers);
+    // console.log('onlineUsersArray', onlineUsersArray);
+    this.server.emit('onlineUsers', onlineUsersArray);
   }
 }
