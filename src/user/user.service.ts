@@ -72,6 +72,50 @@ export class UserService {
     }
   }
 
+  async findUserRole() {
+    try {
+      const response = await this.prismaService.user.findMany({
+        where: {
+          role: 'user', // Filter hanya pengguna dengan status aktif
+        },
+        // take: 10, // Batasan jumlah pengguna yang dimuat
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          createdAt: true,
+        },
+      });
+
+      return response;
+    } catch (error: any) {
+      ResponseServerError();
+    }
+  }
+  async findUserRoleByEmail(email: string) {
+    try {
+      const response = await this.prismaService.user.findMany({
+        where: {
+          NOT: {
+            email: email, // Filter untuk menghindari pengguna dengan ID tertentu
+          },
+          role: 'user', // Filter hanya pengguna dengan status aktif
+        },
+        // take: 10, // Batasan jumlah pengguna yang dimuat
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          createdAt: true,
+        },
+      });
+
+      return response;
+    } catch (error: any) {
+      ResponseServerError();
+    }
+  }
+
   async findByEmail(email: string) {
     try {
       const response = await this.prismaService.user.findUnique({

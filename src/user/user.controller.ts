@@ -25,6 +25,16 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get('/role/user')
+  findUserRole() {
+    return this.userService.findUserRole();
+  }
+
+  @Get('/role/user/:email')
+  findUserRoleByEmail(@Param('email') email: string) {
+    return this.userService.findUserRoleByEmail(email);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findById(+id);

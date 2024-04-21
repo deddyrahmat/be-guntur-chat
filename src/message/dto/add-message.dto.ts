@@ -6,5 +6,12 @@ export class AddMessageDto {
   sender: string;
 
   @IsString()
+  @IsEmail()
+  receiver: string;
+
+  @IsString()
+  createdAt: string;
+
+  @IsString()
   message: string;
 }

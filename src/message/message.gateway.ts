@@ -23,10 +23,18 @@ export class MessageGateway
   private logger = new Logger('MessageGateway');
 
   @SubscribeMessage('message') // subscribe to chat event messages
-  handleMessage(@MessageBody() payload: AddMessageDto): AddMessageDto {
-    this.logger.log(`Message received: ${payload.sender} - ${payload.message}`);
-    this.server.emit('message', payload); // broadbast a message to all clients
-    return payload; // return the same payload data
+  async handleMessage(
+    @MessageBody() payload: AddMessageDto,
+  ): Promise<AddMessageDto> {
+    const checkUser = await this.userService.findByEmail(payload.receiver);
+    if (checkUser) {
+      this.logger.log(
+        `Message received: from ${payload.sender} to ${payload.receiver} on ${payload.createdAt} - ${payload.message}`,
+      );
+      this.server.emit('message', payload); // broadbast a message to all clients
+      return payload; // return the same payload data
+    }
+    return;
   }
 
   //=========================================================================
