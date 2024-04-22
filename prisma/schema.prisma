@@ -14,37 +14,33 @@ datasource db {
 }
 
 model User {
-  id                 Int            @id @default(autoincrement())
-  email              String         @unique
-  name               String
-  password           String
-  role               String         @default("user")
-  active             Boolean        @default(true)
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime?      @updatedAt
-  user1Conversations Conversation[] @relation("User1Conversations")
-  user2Conversations Conversation[] @relation("User2Conversations")
-  Message            Message[]
+  id        Int            @id @default(autoincrement())
+  email     String         @unique
+  name      String
+  password  String
+  role      String         @default("user")
+  // active             Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime?      @updatedAt
+  sender    Conversation[] @relation("sender")
+  receiver  Conversation[] @relation("receiver")
 }
 
 model Conversation {
-  id         Int       @id @default(autoincrement())
-  user1      User      @relation("User1Conversations", fields: [user1_id], references: [id])
-  user1_id   Int
-  user2      User      @relation("User2Conversations", fields: [user2_id], references: [id])
-  user2_id   Int
-  start_time DateTime  @default(now())
-  end_time   DateTime? @default(now())
-  Message    Message[]
+  id               Int       @id @default(autoincrement())
+  user_sender      User      @relation("sender", fields: [user_sender_id], references: [id])
+  user_sender_id   Int
+  user_receiver    User      @relation("receiver", fields: [user_receiver_id], references: [id])
+  user_receiver_id Int
+  start_time       DateTime  @default(now())
+  Message          Message[]
 }
 
 model Message {
   id              Int           @id @default(autoincrement())
   conversation    Conversation? @relation(fields: [conversation_id], references: [id])
   conversation_id Int?
-  sender          User          @relation(fields: [sender_id], references: [id])
-  sender_id       Int
   message         String
   is_read         Boolean       @default(false)
-  timestamp       DateTime      @default(now())
+  createdAt       DateTime      @default(now())
 }
