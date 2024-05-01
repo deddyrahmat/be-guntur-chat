@@ -60,7 +60,7 @@ export class UserService {
           id: true,
           email: true,
           name: true,
-          active: true,
+          // active: true,
           role: true,
           createdAt: true,
         },
