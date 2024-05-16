@@ -19,12 +19,13 @@ export class AuthService {
       // jika user terdaftar dan password sesuai dengan yang ada di db
       if (user && (await compare(dto.password, user.password))) {
         const { password, ...result } = user;
+        // det adalah id dari user, kepanjangan dari detail dan biar unik
         const payload = { det: result.id, email: result.email };
         return {
           ...result,
           access_token: await this.jwtService.signAsync(payload, {
-            secret: 'qwerty12345',
-            expiresIn: '5s',
+            secret: process.env.SECRET_KEY_JWT,
+            expiresIn: '1d',
           }),
         };
       }

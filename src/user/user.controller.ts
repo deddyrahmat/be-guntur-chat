@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,6 +25,18 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Get('/search/:keyword/:page/:pageSize')
+  async searchUsers(
+    @Request() req,
+    @Param('keyword') keyword: string,
+    @Param('page', ParseIntPipe) page: number,
+    @Param('pageSize', ParseIntPipe) pageSize: number,
+  ) {
+    const user = req.user;
+    console.log('user', user);
+    return this.userService.searchUsers(user, keyword, page, pageSize);
   }
 
   @Get('/role/user')

@@ -17,5 +17,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": [
+    "src/**/*.ts", // tambahkan path ke file-file TypeScript Anda di sini
+    "types.d.ts" // tambahkan types.d.ts di sini
+  ]
 }

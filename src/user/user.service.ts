@@ -49,6 +49,50 @@ export class UserService {
     return 'This action adds a new user';
   }
 
+  async searchUsers(
+    user: any,
+    keyword: string,
+    page: number, //urutan data yang ditampilkan
+    pageSize: number, //total data yang ditampilkan
+  ) {
+    const skip = (page - 1) * pageSize;
+    let whereCondition: any = { role: 'user' };
+    if (keyword && keyword !== ',') {
+      whereCondition = {
+        AND: [
+          { role: 'user' },
+          {
+            OR: [
+              { name: { contains: keyword } },
+              { email: { contains: keyword } },
+            ],
+          },
+        ],
+      };
+    }
+    // Hitung total data yang ditemukan
+    const totalFound = await this.prismaService.user.count({
+      where: {
+        ...whereCondition,
+        NOT: {
+          email: user.email,
+        },
+      },
+    });
+    // tambahkan filter untuk menampilkan selain user yang login
+    const users = await this.prismaService.user.findMany({
+      where: {
+        ...whereCondition,
+        NOT: {
+          email: user.email, // Filter untuk menghindari pengguna dengan ID tertentu
+        },
+      },
+      skip,
+      take: pageSize,
+    });
+    return [users, totalFound];
+  }
+
   async findAll() {
     try {
       const response = await this.prismaService.user.findMany({
