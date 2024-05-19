@@ -58,4 +58,49 @@ export class MessageService {
       ResponseServerError();
     }
   }
+
+  async findMessage(id: number) {
+    // Cari semua percakapan di mana pengguna adalah pengirim atau penerima
+    const messages = await this.prismaService.message.findMany({
+      where: {
+        OR: [
+          { conversation: { user_sender_id: id } }, // Pesan dari percakapan yang pengirimnya adalah pengguna
+          { conversation: { user_receiver_id: id } }, // Pesan dari percakapan yang penerimanya adalah pengguna
+        ],
+      },
+      orderBy: {
+        createdAt: 'asc', // Mengurutkan pesan berdasarkan tanggal pembuatan secara ascending
+      },
+      include: {
+        conversation: {
+          include: {
+            user_sender: {
+              select: {
+                name: true, // Hanya memuat kolom name pengguna
+                email: true, // Hanya memuat kolom email pengguna
+              },
+            },
+            user_receiver: {
+              select: {
+                name: true, // Hanya memuat kolom name pengguna
+                email: true, // Hanya memuat kolom email pengguna
+              },
+            },
+          },
+        },
+      },
+    });
+    console.log('messages', messages);
+    return messages.map((item: any) => {
+      console.log('item.', item.conversation.user_sender);
+      return {
+        senderName: item.conversation.user_sender.name,
+        receiverName: item.conversation.user_receiver.name,
+        sender: item.conversation.user_sender.email,
+        receiver: item.conversation.user_receiver.email,
+        message: item.message,
+        createdAt: item.createdAt,
+      };
+    });
+  }
 }

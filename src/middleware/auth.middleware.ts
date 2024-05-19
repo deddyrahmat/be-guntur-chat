@@ -11,6 +11,13 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
+    // Rute yang tidak memerlukan autentikasi
+    const publicRoutes = ['/auth/register', '/auth/login'];
+
+    if (publicRoutes.includes(req.path)) {
+      // Jika rute termasuk dalam publicRoutes, lanjutkan tanpa memeriksa token
+      return next();
+    }
     // Mendapatkan token dari header permintaan atau dari cookie atau dari mana pun Anda menyimpannya
     const token = req.headers.authorization?.replace('Bearer ', ''); // Misalnya, mengambil token dari header Authorization
 
