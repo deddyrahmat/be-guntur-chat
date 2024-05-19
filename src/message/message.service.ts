@@ -90,9 +90,9 @@ export class MessageService {
         },
       },
     });
-    console.log('messages', messages);
+    // console.log('messages', messages);
     return messages.map((item: any) => {
-      console.log('item.', item.conversation.user_sender);
+      // console.log('item.', item.conversation.user_sender);
       return {
         senderName: item.conversation.user_sender.name,
         receiverName: item.conversation.user_receiver.name,
