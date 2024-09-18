@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "/src/app/generated/client"
+  output   = "./generated/client"
+}
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int            @id @default(autoincrement())
+  email     String         @unique
+  name      String
+  password  String
+  role      String         @default("user")
+  // active             Boolean        @default(true)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime?      @updatedAt
+  sender    Conversation[] @relation("sender")
+  receiver  Conversation[] @relation("receiver")
+}
+
+model Conversation {
+  id               Int       @id @default(autoincrement())
+  user_sender      User      @relation("sender", fields: [user_sender_id], references: [id])
+  user_sender_id   Int
+  user_receiver    User      @relation("receiver", fields: [user_receiver_id], references: [id])
+  user_receiver_id Int
+  start_time       DateTime  @default(now())
+  Message          Message[]
+}
+
+model Message {
+  id              Int           @id @default(autoincrement())
+  conversation    Conversation? @relation(fields: [conversation_id], references: [id])
+  conversation_id Int?
+  message         String
+  is_read         Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+}
