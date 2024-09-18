@@ -1,16 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "target": "ES2021",
-    "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "removeComments": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
@@ -18,8 +16,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  // "include": [
-  //   "src/**/*.ts", // tambahkan path ke file-file TypeScript Anda di sini
-  //   "types.d.ts" // tambahkan types.d.ts di sini
-  // ]
+  "include": [
+    "src/**/*.ts"
+    //   "types.d.ts" // tambahkan types.d.ts di sini
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
