@@ -4,8 +4,11 @@
     {
       "src": "src/main.ts",
       "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["node_modules/.prisma/**/*"]
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "commands": {
+        "build": "npx prisma generate && npm run build"
       }
     }
   ],
