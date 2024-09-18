@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from './../prisma.service';
 import { hash } from 'bcrypt';
-import { HttpResponses, ResponseServerError } from 'src/utils/http-responses';
+import { HttpResponses, ResponseServerError } from '../utils/http-responses';
 
 @Injectable()
 export class UserService {

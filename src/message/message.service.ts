@@ -1,7 +1,7 @@
 import { Body, HttpStatus, Injectable, Post } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { AddMessageDto } from './dto/add-message.dto';
-import { HttpResponses, ResponseServerError } from 'src/utils/http-responses';
+import { HttpResponses, ResponseServerError } from '../utils/http-responses';
 
 @Injectable()
 export class MessageService {

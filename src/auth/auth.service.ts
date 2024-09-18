@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from './../user/user.service';
 import { AuthUser } from './dto/auth-user.dto';
 import { compare, hash } from 'bcrypt';
-import { HttpResponses, ResponseServerError } from 'src/utils/http-responses';
+import { HttpResponses, ResponseServerError } from '../utils/http-responses';
 import { PrismaService } from './../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
