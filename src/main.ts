@@ -4,9 +4,10 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['*'], // Beberapa origin yang diizinkan
+    origin: ['http://localhost:5173', 'https://fe-guntur-chat.vercel.app'], // Mengizinkan semua origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Metode yang diizinkan
+    allowedHeaders: ['Content-Type', 'Authorization'], // Header yang diizinkan
   });
-  // await app.listen(3000);
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(3000);
 }
 bootstrap();
